@@ -8,21 +8,31 @@ Quel est l'état du trafic routier sur trois axes parisiens (rue Lecourbe, avenu
 
 Les données proviennent du jeu « Comptages routiers permanents » de la Ville de Paris, importé via l'API Open Data. Elles couvrent la période de mars à août 2026 et concernent les trois axes suivants :
 
-- rue Lecourbe (`Lecourbe`)
-- avenue Foch (`Av_Foch`)
-- avenue Daumesnil (`Av_Daumesnil`)
+- rue Lecourbe (`Lecourbe`), 10 tronçons
+- avenue Foch (`Av_Foch`), 12 tronçons
+- avenue Daumesnil (`Av_Daumesnil`), 24 tronçons
+
+Le jeu brut compte 200 744 mesures horaires sur 46 tronçons.
+
+## Nettoyage
+
+Chaque choix est justifié par les chiffres dans le notebook.
+
+- **Dates** : les horodatages sont en UTC. Ils sont convertis en heure de Paris, et les 92 lignes qui tombent alors le 1er septembre sont supprimées.
+- **Doublons** : aucun, ni en ligne entière ni par tronçon et par heure. En revanche, 52 heures sont absentes de la source pour tous les tronçons.
+- **Colonnes** : les codes des carrefours amont et aval sont supprimés, car ils répètent les libellés (33 codes pour 33 noms).
+- **Valeurs manquantes** : 50 % des lignes brutes ont `q` ou `k` manquant. Les mesures déclarées invalides ou prises sur une voie barrée sont supprimées (34 428 lignes, 17 %). L'état « Inconnu » est traité comme une valeur manquante, car il correspond exactement aux lignes sans taux d'occupation. Les autres valeurs manquantes sont conservées sans imputation : elles viennent de tronçons où une grandeur n'est jamais mesurée.
+
+Après nettoyage, il reste 166 224 mesures sur 43 tronçons.
 
 ## Résultats
 
-Nous pouvons faire plusieurs remarques sur les données :
-
-1. 50 % des lignes ont des valeurs manquantes dans les colonnes `k` ou `q`. Ces lignes ont dû être supprimées afin d'obtenir une analyse pertinente.
-2. Le trafic est principalement fluide sur l'ensemble des axes (voir le graphique circulaire).
-3. L'axe qui présente le débit horaire moyen le plus élevé est l'avenue Foch.
+1. Le trafic est principalement fluide : 61 % des mesures brutes sont classées « Fluide », contre 7,5 % en pré-saturé, saturé ou bloqué. Près d'une mesure sur trois (31 %) n'a pas d'état de trafic connu.
+2. L'axe qui présente le débit horaire moyen le plus élevé est l'avenue Foch (environ 620 véhicules par heure), devant la rue Lecourbe (396) et l'avenue Daumesnil (170).
 
 ## Limites
 
-Les données comportent beaucoup de valeurs manquantes, ce qui a pu fausser les résultats. De plus, il aurait été pertinent d'analyser le trafic selon les heures de passage.
+Les données comportent beaucoup de valeurs manquantes, concentrées sur certains tronçons, ce qui a pu fausser les moyennes par axe. L'analyse du trafic selon l'heure et le jour reste à faire.
 
 ## Lancer le projet
 
@@ -30,10 +40,9 @@ Les données comportent beaucoup de valeurs manquantes, ce qui a pu fausser les 
 python3 -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
-python download_data.py
 ```
 
-Puis exécuter le notebook `projet_data.ipynb`.
+Puis exécuter le notebook `projet_data.ipynb` de haut en bas : il télécharge les données dans `data/` à la première exécution (1 à 3 minutes).
 
 ## Utilisation de l'IA
 
