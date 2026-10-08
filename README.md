@@ -23,16 +23,19 @@ Chaque choix est justifié par les chiffres dans le notebook.
 - **Colonnes** : les codes des carrefours amont et aval sont supprimés, car ils répètent les libellés (33 codes pour 33 noms).
 - **Valeurs manquantes** : 50 % des lignes brutes ont `q` ou `k` manquant. Les mesures déclarées invalides ou prises sur une voie barrée sont supprimées (34 428 lignes, 17 %). L'état « Inconnu » est traité comme une valeur manquante, car il correspond exactement aux lignes sans taux d'occupation. Les autres valeurs manquantes sont conservées sans imputation : elles viennent de tronçons où une grandeur n'est jamais mesurée.
 
+- **Valeurs aberrantes** : 8 débits supérieurs à 5 000 véhicules/heure, incohérents avec un taux d'occupation faible au même moment, sont remplacés par une valeur manquante (règle 3 × IQR appliquée tronçon par tronçon).
+
 Après nettoyage, il reste 166 224 mesures sur 43 tronçons.
 
 ## Résultats
 
 1. Le trafic est principalement fluide : 61 % des mesures brutes sont classées « Fluide », contre 7,5 % en pré-saturé, saturé ou bloqué. Près d'une mesure sur trois (31 %) n'a pas d'état de trafic connu.
 2. L'axe qui présente le débit horaire moyen le plus élevé est l'avenue Foch (environ 620 véhicules par heure), devant la rue Lecourbe (396) et l'avenue Daumesnil (170).
+3. Les heures les plus chargées diffèrent selon l'axe : 17 h à 19 h sur l'avenue Foch, 18 h à 20 h sur la rue Lecourbe, et deux maximums à 12 h et 17 h sur l'avenue Daumesnil. Le creux se situe partout entre 4 h et 6 h du matin.
 
 ## Limites
 
-Les données comportent beaucoup de valeurs manquantes, concentrées sur certains tronçons, ce qui a pu fausser les moyennes par axe. L'analyse du trafic selon l'heure et le jour reste à faire.
+Les données comportent beaucoup de valeurs manquantes, concentrées sur certains tronçons, ce qui a pu fausser les moyennes par axe. De plus, plusieurs tronçons voisins portent exactement le même débit (36 tronçons pour 14 profils distincts) : un même point de mesure est compté plusieurs fois dans les moyennes par axe. La comparaison semaine / week-end reste à faire.
 
 ## Lancer le projet
 
